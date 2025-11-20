@@ -27,7 +27,7 @@ function LoginPage() {
       localStorage.setItem('token', response.data.access);
       setSuccess('ورود با موفقیت انجام شد!');
       setError('');
-      window.location.href = '/activities';
+      window.location.href = '/';
     } catch (err) {
       setError('خطا در ورود: ' + (err.response?.data?.detail || JSON.stringify(err.response?.data) || 'خطای ناشناخته'));
       setSuccess('');
