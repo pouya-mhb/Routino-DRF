@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Container, Button, Modal, Form, Alert, Card } from 'react-bootstrap';
 import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -80,11 +80,13 @@ function NewRoutine() {
       setError('لطفاً حداقل یک فعالیت انتخاب کنید.');
       return;
     }
+    const payload = {
+      ...formData,
+      profile: profile.user_profile
+    };
+    console.log('Request Payload:', payload); // لاگ برای دیباگ
     try {
-      const response = await axios.post('http://localhost:8000/api/routines/', {
-        ...formData,
-        profile: profile.user_profile
-      }, {
+      const response = await axios.post('http://localhost:8000/api/routines/', payload, {
         headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' }
       });
       setRoutines([...routines, response.data]);
@@ -192,7 +194,7 @@ function NewRoutine() {
               <Card.Title>{routine.title}</Card.Title>
               <Card.Text>{routine.description}</Card.Text>
               <Card.Text>
-                فعالیت‌ها: {Array.isArray(routine.activities) ? routine.activities.map(id => activities.find(act => act.id === id)?.title).join(', ') : ''}
+                فعالیت‌ها: {routine.activities.map(id => activities.find(act => act.id === id)?.title).join(', ')}
               </Card.Text>
               <Card.Text>تاریخ شروع: {routine.start_date}</Card.Text>
               <Card.Text>تاریخ پایان: {routine.end_date}</Card.Text>
